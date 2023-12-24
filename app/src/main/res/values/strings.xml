@@ -26,5 +26,12 @@
     <string name="twitter">Twitter</string>
     <string name="follow_button">FOLLOW</string>
     <string name="unfollow_button">UNFOLLOW</string>
+    <string name="follow_election">Follow Election</string>
+    <string name="unfollow_election">UnFollow Election</string>
+    <string name="follow">Follow</string>
+    <string name="ballot_info">Ballot Info</string>
+    <string name="voter_info">Voter Info</string>
+    <string name="election_information">Election Information</string>
+    <string name="electoin_date">Electoin Date:</string>
 
 </resources>

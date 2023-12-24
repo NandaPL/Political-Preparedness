@@ -35,6 +35,9 @@
         <argument
             android:name="argument_division"
             app:argType="com.example.android.politicalpreparedness.network.models.Division" />
+        <argument
+            android:name="election"
+            app:argType="com.example.android.politicalpreparedness.network.models.Election" />
 
     </fragment>
     <fragment

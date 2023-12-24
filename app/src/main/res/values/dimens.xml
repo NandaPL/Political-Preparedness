@@ -2,7 +2,21 @@
 <resources>
     <dimen name="default_padding">8dp</dimen>
 
-    <!-- TODO: Add necessary dimension values -->s
+    <dimen name="large_padding">16dp</dimen>
+    <dimen name="medium_padding">16sp</dimen>
+    <dimen name="small_padding">14sp</dimen>
+    <dimen name="very_large_padding">32dp</dimen>
+    <dimen name="new_textSize">24dp</dimen>
+    <dimen name="text_Size">24sp</dimen>
+    <dimen name="layout_width">0dp</dimen>
+    <dimen name="layout_heigth">250dp</dimen>
+    <dimen name="elevation">18dp</dimen>
+    <dimen name="my_textSize">18sp</dimen>
+    <dimen name="newHeight">48dp</dimen>
+    <dimen name="maxLength">5</dimen>
+    <dimen name="testSize">30dp</dimen>
+    <dimen name="validSize">60dp</dimen>
+    <dimen name="makeFive">5dp</dimen>
 
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_large">48dp</dimen>

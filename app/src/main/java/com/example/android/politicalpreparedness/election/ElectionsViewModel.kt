@@ -9,65 +9,40 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
-class ElectionsViewModel(application: Application) : ViewModel() {
-    private val database = ElectionDatabase.getInstance(application)
-    private val electionRepository = ElectionRepository(database)
+class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
-    val upcomingElections: LiveData<List<Election>>
-        get() = electionRepository.allElections
+    private val _upcomingElections = MutableLiveData<List<Election>>()
+    val upcomingElections: LiveData<List<Election>> = _upcomingElections
 
-    val followedElections: LiveData<List<Election>>
-        get() = electionRepository.allFollowedElections
+    private val _savedElections = MutableLiveData<List<Election>>()
+    val savedElections: LiveData<List<Election>> = _savedElections
 
     init {
+        loadData()
+    }
+
+    private fun loadData() {
+        getUpcomingElectionsFromNetwork()
+        getSavedElectionsFromDatabase()
+    }
+
+    private fun getUpcomingElectionsFromNetwork() {
         viewModelScope.launch {
-            electionRepository.refreshElections()
+            val electionResponse = CivicsApi.retrofitService.getElections()
+            _upcomingElections.value = electionResponse.elections
         }
     }
 
-    private val _navigateToDetailElection = MutableLiveData<Election?>()
-    private val _navigateToVoterInfoFragment = MutableLiveData<Election?>()
-    val navigateToVoterInfoFragment: MutableLiveData<Election?>
-        get() = _navigateToVoterInfoFragment
-
-    fun onElectionClicked(election: Election) {
-        _navigateToVoterInfoFragment.value = election
-    }
-
-    fun onNavigationComplete() {
-        _navigateToVoterInfoFragment.value = null
-    }
-
-    fun onElectionNavigated() {
-        _navigateToDetailElection.value = null
-    }
-}
-
-class ElectionRepository(private val database: ElectionDatabase) {
-    val allElections: LiveData<List<Election>> = database.electionDao.getSavedElections()
-
-    val allFollowedElections: LiveData<List<Election>> = database.electionDao.getFollowedElections()
-
-    val voterInfo = MutableLiveData<VoterInfoResponse>()
-
-    suspend fun refreshElections() {
-        withContext(Dispatchers.IO) {
-            try {
-                val electionsResponse = CivicsApi.retrofitService.getElections()
-                val result = electionsResponse.elections
-
-                database.electionDao.insertAllElections(*result.toTypedArray())
-
-                Log.d(TAG, result.toString())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+    fun getSavedElectionsFromDatabase() {
+        viewModelScope.launch {
+            _savedElections.value = dataSource.getAll()
         }
     }
-
 }

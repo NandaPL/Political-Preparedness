@@ -14,129 +14,96 @@
         android:layout_height="match_parent"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/margin_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineEnd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/margin_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/margin_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineBottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/margin_normal" />
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tbElectionName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cardview_dark_background"
+            android:backgroundTint="@color/colorAccent"
             android:padding="@dimen/default_padding"
             android:singleLine="true"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@{viewModel.voterInfo.election.name}"
-            app:titleTextColor="@color/white" />
+            app:title="Election Name!"
+            app:titleTextColor="@color/white"
+            tools:ignore="MissingClass" />
+
 
         <TextView
-            android:id="@+id/tvElectionDateItem"
-            style="@style/subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
-            app:layout_constraintBottom_toTopOf="@id/tvStateHeader"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/tbElectionName"
-            app:text="@{viewModel.voterInfo.election.electionDay.toString()}"
-            tools:text="22 October 2021" />
-
-        <TextView
-            android:id="@+id/tvStateHeader"
-            style="@style/header"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/tvElectionDateItem"
-            tools:text="Election Information" />
-
-        <TextView
-            android:id="@+id/state_locations"
-            style="@style/subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.votingLocationsClick()}"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/tvStateHeader"
-            tools:text="Voting Locations" />
-
-        <TextView
-            android:id="@+id/tvStateBallot"
-            style="@style/subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.ballotInformationClick()}"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/state_locations"
-            tools:text="Ballot Information" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/groupAddress"
+            android:id="@+id/tvElectionDateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tvStateCorrespondenceHeader,address" />
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginTop="@dimen/large_padding"
+            android:text="@string/electoin_date"
+            android:textSize="@dimen/my_textSize"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tbElectionName" />
 
         <TextView
-            android:id="@+id/tvStateCorrespondenceHeader"
-            style="@style/header"
-            android:layout_width="0dp"
+            android:id="@+id/tvElectionDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/tvStateBallot"
-            tools:text="Address" />
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/tvElectionDateLabel"
+            app:layout_constraintTop_toBottomOf="@+id/tbElectionName"
+            tools:text="12 November 2055" />
 
         <TextView
-            android:id="@+id/address"
-            style="@style/subtitle"
-            android:layout_width="0dp"
+            android:id="@+id/tvvElectionInfo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/tvStateCorrespondenceHeader"
-            tools:text="Address" />
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginTop="@dimen/very_large_padding"
+            android:text="@string/election_information"
+            android:textColor="@color/gray50"
+            android:textSize="@dimen/elevation"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvElectionDateLabel"
+            tools:ignore="SpUsage" />
 
         <Button
-            android:id="@+id/btnFollowUnfollow"
-            android:layout_width="0dp"
+            android:id="@+id/btnVoterInfo"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginTop="@dimen/very_large_padding"
+            android:text="@string/voter_info"
+            android:textSize="@dimen/small_padding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvvElectionInfo" />
+
+        <Button
+            android:id="@+id/btnBallotInfo"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/very_large_padding"
+            android:layout_marginEnd="@dimen/very_large_padding"
+            android:text="@string/ballot_info"
+            android:textSize="@dimen/small_padding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvvElectionInfo" />
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="@dimen/layout_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_padding"
+            android:layout_marginEnd="@dimen/large_padding"
+            android:layout_marginBottom="@dimen/default_padding"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:onClick="@{() -> viewModel.followUnfollowButton()}"
-            android:text="@string/follow_unfollow_button"
+            android:text="@string/follow"
             android:textColor="@color/white"
+            android:textSize="@dimen/medium_padding"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

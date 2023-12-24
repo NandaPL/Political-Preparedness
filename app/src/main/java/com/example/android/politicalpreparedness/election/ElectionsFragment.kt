@@ -17,50 +17,42 @@ import com.example.android.politicalpreparedness.election.adapter.ElectionListen
 class ElectionsFragment : Fragment() {
 
     private lateinit var viewModel: ElectionsViewModel
-
-    private lateinit var adapterUpcomingElections: ElectionListAdapter
-    private lateinit var adapterSavedElections: ElectionListAdapter
+    private lateinit var viewModelFactory: ElectionsViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentElectionBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_election,
-            container,
-            false
-        )
+        val binding = FragmentElectionBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
-        val database = ElectionDatabase.getInstance(requireContext())
+        setupViewModel()
+        setupAdapters(binding)
+        refreshSavedElections()
 
-        val viewModelFactory = ElectionsViewModelFactory(requireActivity().application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ElectionsViewModel::class.java)
         binding.viewModel = viewModel
 
-        val electionAdapter = ElectionListAdapter(ElectionListener { election ->
-            viewModel.onElectionClicked(election)
-        })
-        binding.rvUpcomingElections.adapter = electionAdapter
-
-        val savedElectionAdapter = ElectionListAdapter(ElectionListener { election ->
-            viewModel.onElectionClicked(election)
-        })
-        binding.rvSavedElections.adapter = savedElectionAdapter
-
-        viewModel.navigateToVoterInfoFragment.observe(viewLifecycleOwner) {
-            it?.let { election ->
-                this.findNavController().navigate(
-                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
-                        election.id,
-                        election.division
-                    )
-                )
-                viewModel.onNavigationComplete()
-            }
-        }
         return binding.root
+    }
+
+    private fun setupViewModel() {
+        val dataSource = ElectionDatabase.getInstance(requireActivity().applicationContext).electionDao
+        viewModelFactory = ElectionsViewModelFactory(dataSource)
+        viewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
+    }
+
+    private fun setupAdapters(binding: FragmentElectionBinding) {
+        val electionListener = ElectionListener { election ->
+            val action = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election.division, election)
+            findNavController().navigate(action)
+        }
+
+        binding.rvUpcomingElections.adapter = ElectionListAdapter(electionListener)
+        binding.rvSavedElections.adapter = ElectionListAdapter(electionListener)
+    }
+
+    private fun refreshSavedElections() {
+        viewModel.getSavedElectionsFromDatabase()
     }
 }

@@ -79,7 +79,7 @@
 
             <EditText
                 android:id="@+id/etAddressLine2"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:hint="@string/address_line_2"
@@ -90,57 +90,57 @@
                 app:layout_constraintTop_toBottomOf="@id/EtAddressLine1" />
 
             <EditText
-                android:id="@+id/city"
-                android:layout_width="0dp"
+                android:id="@+id/etCity"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:hint="@string/city"
                 android:inputType="textPostalAddress"
                 android:text="@{viewModel.address.city}"
-                app:layout_constraintEnd_toStartOf="@id/state"
+                app:layout_constraintEnd_toStartOf="@id/spState"
                 app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
                 app:layout_constraintTop_toBottomOf="@id/etAddressLine2" />
 
             <Spinner
-                android:id="@+id/state"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:id="@+id/spState"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="@dimen/layout_width"
                 android:autofillHints=""
                 android:entries="@array/states"
                 android:inputType="textPostalAddress"
-                app:layout_constraintBottom_toBottomOf="@id/city"
+                app:layout_constraintBottom_toBottomOf="@id/etCity"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
-                app:layout_constraintStart_toEndOf="@id/city"
-                app:layout_constraintTop_toTopOf="@id/city"
+                app:layout_constraintStart_toEndOf="@id/etCity"
+                app:layout_constraintTop_toTopOf="@id/etCity"
                 app:stateValue="@{viewModel.address.state}" />
 
             <EditText
-                android:id="@+id/zip"
-                android:layout_width="0dp"
+                android:id="@+id/etZip"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:hint="@string/zip"
                 android:inputType="number"
                 android:maxLength="5"
                 android:text="@{viewModel.address.zip}"
-                app:layout_constraintEnd_toEndOf="@id/city"
+                app:layout_constraintEnd_toEndOf="@id/etCity"
                 app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
-                app:layout_constraintTop_toBottomOf="@id/city" />
+                app:layout_constraintTop_toBottomOf="@id/etCity" />
 
             <Button
                 android:id="@+id/btnSearch"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:text="@string/find_my_representatives"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
                 app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
-                app:layout_constraintTop_toBottomOf="@id/zip" />
+                app:layout_constraintTop_toBottomOf="@id/etZip" />
 
             <Button
                 android:id="@+id/btnLocation"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:text="@string/use_my_location"
@@ -153,7 +153,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/representativesArea"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/layout_width"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,7 @@
             <TextView
                 android:id="@+id/tvRepresentativeTitle"
                 style="@style/header"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/layout_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/my_representatives"
@@ -202,8 +202,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRepresentatives"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/layout_width"
+                android:layout_height="@dimen/layout_width"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEndRepresentatives"
@@ -214,7 +214,7 @@
             <TextView
                 android:id="@+id/tvListPlaceHolder"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/layout_width"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:visibility="gone"

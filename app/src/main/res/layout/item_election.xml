@@ -17,7 +17,7 @@
         <TextView
             android:id="@+id/tvElectionTitleItem"
             style="@style/title"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/layout_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_normal"
@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/tvElectionDateItem"
             style="@style/subtitle"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/layout_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="@{election.electionDay.toString()}"

@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
@@ -9,83 +10,60 @@ import com.example.android.politicalpreparedness.network.models.VoterInfoRespons
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
-class VoterInfoViewModel(
-    private val dataSource: ElectionDao,
-    private val electionId: Int,
-    private val division: Division
-) : ViewModel() {
+class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
 
-    var electionFromDatabase: Election? = null
+    private val _voterInfoResponse = MutableLiveData<VoterInfoResponse>()
+    val voterInfoResponse : LiveData<VoterInfoResponse>
+        get() = _voterInfoResponse
 
-    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
-    val voterInfo: LiveData<VoterInfoResponse>
-        get() = _voterInfo
+    private val _locationString = MutableLiveData<String>()
+    val locationString : LiveData<String>
+        get() = _locationString
 
-    init {
-        getVoterInfo()
+    private var id = 0
+
+    private val _savedElection = MutableLiveData<Election>()
+    val savedElection : LiveData<Election>
+        get() = _savedElection
+
+    fun setLocationAndElectionIdAndGetVoterResponse(location: String, Id : Int){
+        _locationString.value = location
+        id = Id
+        getVoterInfoResponse()
     }
 
-    private fun getVoterInfo() {
+    private fun getVoterInfoResponse(){
+        try{
+            viewModelScope.launch {
+                val response = CivicsApi.retrofitService.getVoterInfo(_locationString.value!!,id)
+                _voterInfoResponse.value = response
+            }
+        }catch (e: Exception){
+            Timber.tag("Error").i(" Trying to Get Data From Retrofit")
+        }
+
+    }
+
+    fun checkElectionByIdFromDatabase(electionId: Int) {
         viewModelScope.launch {
-            var address = "country:${division.country}"
-            if (!division.state.isBlank() && !division.state.isEmpty()) {
-                address += "/state:${division.state}"
-            } else {
-                address += "/state:ca"
-            }
-            _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(
-                address, electionId
-            )
+            _savedElection.value = dataSource.getElectionById(id)
         }
     }
 
-    private val _votingLocationsUrl = MutableLiveData<String?>()
-    val votingLocationUrl: LiveData<String?>
-        get() = _votingLocationsUrl
 
-    fun votingLocationsClick() {
-        _votingLocationsUrl.value =
-            _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl
-    }
-
-    fun votingLocationsNavigated() {
-        _votingLocationsUrl.value = null
-    }
-
-    // Ballot Information
-    private val _ballotInformationUrl = MutableLiveData<String?>()
-    val ballotInformationUrl: LiveData<String?>
-        get() = _ballotInformationUrl
-
-    fun ballotInformationClick() {
-        _votingLocationsUrl.value =
-            _voterInfo.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl
-    }
-
-    fun ballotInformationNavigated() {
-        _ballotInformationUrl.value = null
-    }
-
-    private val _isElectionFollowed: LiveData<Int>
-        get() = dataSource.isElectionFollowed(electionId)
-
-    val isElectionFollowed =
-        Transformations.map(_isElectionFollowed) { followValue ->
-            followValue?.let {
-                followValue == 1
-            }
-        }
-
-    fun followUnfollowButton() {
+    fun saveElection(election : Election){
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                if (isElectionFollowed.value == true) {
-                    dataSource.unfollowElection(electionId)
-                } else {
-                    dataSource.followElection(electionId)
-                }
-            }
+            dataSource.insert(election)
+            checkElectionByIdFromDatabase(election.id)
         }
     }
+    fun deleteElection(election: Election){
+        viewModelScope.launch {
+            dataSource.deleteElection(election)
+            checkElectionByIdFromDatabase(election.id)
+        }
+    }
+
 }

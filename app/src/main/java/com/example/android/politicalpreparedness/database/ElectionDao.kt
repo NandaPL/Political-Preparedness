@@ -33,6 +33,9 @@ interface ElectionDao {
 
     @Query("DELETE FROM election_table WHERE id =:electionId")
     suspend fun deleteElection(electionId: Int)
+    suspend fun deleteElection(election: Election){
+        deleteElection(election.id)
+    }
 
     @Query("DELETE FROM followed_election_table WHERE id = :idElection")
     suspend fun unfollowElection(idElection: Int)
@@ -40,6 +43,10 @@ interface ElectionDao {
         unfollowElection(election.id)
     }
 
+    @Query("SELECT * FROM election_table")
+    suspend fun getAll() : List<Election>
+
     @Query("DELETE FROM election_table")
     fun clearAllElections()
+
 }
