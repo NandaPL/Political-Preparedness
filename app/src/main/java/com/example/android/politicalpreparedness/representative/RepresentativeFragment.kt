@@ -29,7 +29,7 @@ class DetailFragment : Fragment() {
     }
 
     private val viewModel: RepresentativeViewModel by lazy {
-        ViewModelProvider(this).get(RepresentativeViewModel::class.java)
+        ViewModelProvider(this)[RepresentativeViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -53,7 +53,7 @@ class DetailFragment : Fragment() {
 
         viewModel.address.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.state.setNewValue(it.state)
+                binding.spState.setNewValue(it.state)
             }
         })
 
@@ -69,6 +69,7 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -88,7 +89,7 @@ class DetailFragment : Fragment() {
         } else {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf<String>(ACCESS_FINE_LOCATION),
+                arrayOf(ACCESS_FINE_LOCATION),
                 REQUEST_LOCATION_PERMISSION
             )
             false

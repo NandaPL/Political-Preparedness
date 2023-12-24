@@ -68,15 +68,15 @@ class VoterInfoFragment : Fragment() {
             setInfoForElection(it)
         })
 
-        binding.voterInfoButton.setOnClickListener { startIntentFromUrl(votingInfoLocationsUrlString) }
-        binding.ballotInfoButton.setOnClickListener { startIntentFromUrl(ballotInformationUrlString) }
+        binding.btnVoterInfo.setOnClickListener { startIntentFromUrl(votingInfoLocationsUrlString) }
+        binding.btnBallotInfo.setOnClickListener { startIntentFromUrl(ballotInformationUrlString) }
 
         viewModel.checkElectionByIdFromDatabase(args.argumentElectionId)
         viewModel.savedElection.observe(viewLifecycleOwner, Observer {
             setFollowButtonState(it, args.election)
         })
 
-        binding.followButton.setOnClickListener {
+        binding.btnFollow.setOnClickListener {
             toggleFollowElection(args.election)
         }
     }
@@ -84,8 +84,8 @@ class VoterInfoFragment : Fragment() {
     private fun setInfoForElection(response: VoterInfoResponse) {
         votingInfoLocationsUrlString = response.state!![0].electionAdministrationBody.electionInfoUrl.toString()
         ballotInformationUrlString = response.state!![0].electionAdministrationBody.ballotInfoUrl.toString()
-        binding.electionName.title = response.election.name.toString()
-        binding.electionDate.text = response.election.electionDay.toString()
+        binding.tbElectionName.title = response.election.name.toString()
+        binding.tvElectionDate.text = response.election.electionDay.toString()
     }
 
     private fun startIntentFromUrl(url: String) {
@@ -112,11 +112,11 @@ class VoterInfoFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setFollowButtonState(savedElection: Election?, currentElection: Election) =
         if (savedElection == currentElection) {
-            binding.followButton.text = getString(R.string.unfollow_election)
-            binding.electionName.title = savedElection.name
-            binding.electionDate.text = savedElection.electionDay.toString()
+            binding.btnFollow.text = getString(R.string.unfollow_election)
+            binding.tbElectionName.title = savedElection.name
+            binding.tvElectionDate.text = savedElection.electionDay.toString()
         } else {
-            binding.followButton.text = getString(R.string.follow_election)
+            binding.btnFollow.text = getString(R.string.follow_election)
         }
 
     private fun toggleFollowElection(election: Election) {
