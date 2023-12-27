@@ -17,13 +17,10 @@ import com.example.android.politicalpreparedness.network.models.Election
 fun fetchImage(view: ImageView, src: String?) {
     src?.let {
         val uri = src.toUri().buildUpon().scheme("https").build()
-        Glide.with(view)
+        Glide.with(view.context)
             .load(uri)
-            .apply(RequestOptions()
-                .placeholder(R.drawable.ic_profile)
-                .error(R.drawable.ic_profile)
-                .circleCrop())
-            .transition(DrawableTransitionOptions.withCrossFade())
+            .error(R.drawable.ic_profile)
+            .circleCrop()
             .into(view)
     }
 }

@@ -66,7 +66,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/EtAddressLine1"
+                android:id="@+id/etAddressLine1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
@@ -87,7 +87,7 @@
                 android:text="@{viewModel.address.line2}"
                 app:layout_constraintEnd_toStartOf="@id/guidelineEndAddress"
                 app:layout_constraintStart_toStartOf="@id/guidelineStartAddress"
-                app:layout_constraintTop_toBottomOf="@id/EtAddressLine1" />
+                app:layout_constraintTop_toBottomOf="@id/etAddressLine1" />
 
             <EditText
                 android:id="@+id/etCity"

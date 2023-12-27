@@ -10,6 +10,7 @@ import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,8 +30,7 @@ class DetailFragment : Fragment() {
         const val REQUEST_LOCATION_PERMISSION = 1
     }
 
-    private var _binding: FragmentRepresentativeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var dataBinding: FragmentRepresentativeBinding
 
     private val viewModel: RepresentativeViewModel by lazy {
         ViewModelProvider(this)[RepresentativeViewModel::class.java]
@@ -42,12 +42,12 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentRepresentativeBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        dataBinding = FragmentRepresentativeBinding.inflate(inflater)
+        dataBinding.lifecycleOwner = this
+        dataBinding.viewModel = viewModel
 
         val representativeAdapter = RepresentativeListAdapter()
-        binding.rvRepresentatives.adapter = representativeAdapter
+        dataBinding.rvRepresentatives.adapter = representativeAdapter
 
         viewModel.representatives.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -57,36 +57,63 @@ class DetailFragment : Fragment() {
 
         viewModel.address.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.spState.setNewValue(it.state)
+                dataBinding.spState.setNewValue(it.state)
             }
         })
 
-        binding.btnSearch.setOnClickListener {
-            viewModel.getRepresentatives(viewModel.address.value.toString())
+        dataBinding.btnSearch.setOnClickListener {
+            if(getAddressFromUser() != null){
+                viewModel.setAddressOfUser(getAddressFromUser()!!)
+                viewModel.getRepresentativeResponse()
+                hideKeyboard()
+
+            }else{
+                Toast.makeText(requireContext(), "Fill Out Fields!!", Toast.LENGTH_LONG).show()
+            }
             hideKeyboard()
         }
 
-        binding.btnLocation.setOnClickListener {
+        dataBinding.btnLocation.setOnClickListener {
             getLocation()
         }
 
         if (savedInstanceState != null) {
             val position = savedInstanceState.getInt("scroll_position", 0)
-            (binding.rvRepresentatives.layoutManager as LinearLayoutManager).scrollToPosition(position)
+            (dataBinding.rvRepresentatives.layoutManager as LinearLayoutManager).scrollToPosition(
+                position
+            )
         }
 
         viewModel.restoreState(savedInstanceState)
 
-        return binding.root
+        return dataBinding.root
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        val layoutManager = binding.rvRepresentatives.layoutManager as LinearLayoutManager
-        val position = layoutManager.findFirstVisibleItemPosition()
-        outState.putInt("scroll_position", position)
+        dataBinding.let { binding ->
+            val layoutManager = binding.rvRepresentatives.layoutManager as? LinearLayoutManager
+            val position = layoutManager?.findFirstVisibleItemPosition()
+            if (position != null) {
+                outState.putInt("scroll_position", position)
+            }
+        }
         viewModel.saveState(outState)
+    }
+
+    private fun getAddressFromUser(): Address?{
+        val line1 = dataBinding.etAddressLine1.text.toString()
+        val line2 = dataBinding.etAddressLine2.text.toString()
+        val city = dataBinding.etCity.text.toString()
+        val state = dataBinding.spState.selectedItem
+        val zip = dataBinding.etZip.text.toString()
+
+        return if(line1.isNotEmpty() && city.isNotEmpty() && state!= null && zip.isNotEmpty()){
+            Address(line1, line2, city, state.toString(), zip)
+        }else{
+            null
+        }
     }
 
     @Deprecated("Deprecated in Java")
