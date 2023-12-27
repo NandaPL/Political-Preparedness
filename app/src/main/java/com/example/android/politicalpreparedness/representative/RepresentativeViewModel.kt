@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,18 @@ class RepresentativeViewModel : ViewModel() {
         _address.value = address
     }
 
-    init {
-        _address.value = Address("", "", "", "Alabama", "")
+
+    fun saveState(outState: Bundle) {
+        outState.putParcelable("address", _address.value)
+    }
+
+    fun restoreState(savedInstanceState: Bundle?) {
+        _address.value = savedInstanceState?.getParcelable<Address>("address") ?: Address(
+            "",
+            "",
+            "",
+            "Alabama",
+            ""
+        )
     }
 }
